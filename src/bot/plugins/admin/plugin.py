@@ -8,28 +8,27 @@ class AdminPlugin(BasePlugin):
 
     PLUGIN_NAME = "Admin"
     PLUGIN_VERSION = "1.0.0"
-    PLUGIN_DESCRIPTION = "Herramientas de administración del bot"
+    PLUGIN_DESCRIPTION = "Administration tools for the bot"
     PLUGIN_AUTHOR = "Mizuki Team"
 
     async def setup(self):
-
-        @app_commands.command(name="plugins", description="Lista todos los plugins cargados")
+        @app_commands.command(name="plugins", description="List all loaded plugins")
         @app_commands.default_permissions(administrator=True)
         async def plugins_list(interaction: discord.Interaction):
             plugins_info = self.bot.plugin_manager.list_plugins()
 
             if not plugins_info:
-                await interaction.response.send_message("❌ No hay plugins cargados")
+                await interaction.response.send_message("❌ No plugins loaded")
                 return
 
-            embed = discord.Embed(title="🔌 Plugins Cargados", color=0x7289DA)
+            embed = discord.Embed(title="🔌 Loaded Plugins", color=0x7289DA)
 
             for plugin_info in plugins_info:
                 if plugin_info:
-                    value = (f"**Versión:** {plugin_info['version']}\n"
-                             f"**Descripción:** {plugin_info['description']}\n"
-                             f"**Autor:** {plugin_info['author']}\n"
-                             f"**Comandos:** {plugin_info['commands']['prefix_commands']} prefijo, "
+                    value = (f"**Version:** {plugin_info['version']}\n"
+                             f"**Description:** {plugin_info['description']}\n"
+                             f"**Author:** {plugin_info['author']}\n"
+                             f"**Commands:** {plugin_info['commands']['prefix_commands']} prefix, "
                              f"{plugin_info['commands']['slash_commands']} slash")
 
                     embed.add_field(

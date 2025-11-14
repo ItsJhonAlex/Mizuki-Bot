@@ -1,1 +1,1 @@
-"""Administración del bot plugin"""\n
+"""Administración del bot plugin"""

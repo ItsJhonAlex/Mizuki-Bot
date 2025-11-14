@@ -2,7 +2,7 @@
 
 name = "Mitzuki"
 version = "0.1.0"
-description = "Mizuki es tu asistente lunar perfecta para Discord. Con su elegancia celestial y tecnología avanzada, te ayuda a gestionar tu servidor con la suavidad de la luz de luna."
+description = "Mizuki is your perfect lunar assistant for Discord. With its celestial elegance and advanced technology, it helps you manage your server with the soft light of the moon."
 authors = [
     { name = "ItsJhonAlex", email = "itsjhonalex@gmail.com"}
 ]

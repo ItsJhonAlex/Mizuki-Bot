@@ -20,15 +20,15 @@ class {class_name}(BasePlugin):
 
         @commands.command(name="example")
         async def example(ctx: commands.Context):
-            await ctx.send("¡Hola desde {name}!")
+            await ctx.send("Hello from {name}!")
 
         self.register_prefix_command(example_prefix)
 
-        @app_commands.command(name="example", description="Comando de example")
+    @app_commands.command(name="example", description="Example command")
         async def example_slash(interaction: discord.Interaction):
             embed = discord.Embed(
                 title="Example",
-                description="¡Hello {name}!",
+                description="Hello {name}!",
                 color=0x00ff00
             )
             await interaction.response.send_message(embed=embed)
@@ -45,11 +45,11 @@ def create_plugin(plugin_name: str, author: str = "Mizuki Team", description: st
     os.makedirs(plugin_dir, exist_ok=True)
 
     with open(f"{plugin_dir}/__init__.py", 'w', encoding='utf-8') as f:
-        f.write(f'"""{description or plugin_name} plugin"""\\n')
+        f.write(f'"""{description or plugin_name} plugin"""\n')
 
     class_name = ''.join(word.capitalize() for word in plugin_name.split('_'))
     if not description:
-        description = f"Plugin {plugin_name} para Mizuki Bot"
+        description = f"Plugin {plugin_name} for Mizuki Bot"
 
     with open(f"{plugin_dir}/plugin.py", 'w', encoding='utf-8') as f:
         f.write(PLUGIN_TEMPLATE.format(
@@ -59,14 +59,14 @@ def create_plugin(plugin_name: str, author: str = "Mizuki Team", description: st
             author=author
         ))
 
-    print(f"✅ Plugin '{plugin_name}' create in {plugin_dir}")
+    print(f"✅ Plugin '{plugin_name}' created in {plugin_dir}")
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Crear un nuevo plugin")
-    parser.add_argument("name", help="Nombre del plugin")
-    parser.add_argument("--author", default="Mizuki Team", help="Autor del plugin")
-    parser.add_argument("--description", default="", help="Descripción del plugin")
+    parser = argparse.ArgumentParser(description="Create a new plugin")
+    parser.add_argument("name", help="Plugin name")
+    parser.add_argument("--author", default="Mizuki Team", help="Plugin author")
+    parser.add_argument("--description", default="", help="Plugin description")
 
     args = parser.parse_args()
     create_plugin(args.name, args.author, args.description)

@@ -17,7 +17,11 @@ class Bot(commands.Bot):
         )
 
         self.logger = logging.getLogger("mizuki")
+        # Primary plugin manager instance (kept as `plugins` for internal use)
         self.plugins = PluginManager(self)
+        # Backwards-compatible alias: some plugins expect `bot.plugin_manager`
+        # so provide the same instance under that name.
+        self.plugin_manager = self.plugins
 
     async def setup_hook(self):
         self.logger.info(f"Setup hook called")
@@ -51,7 +55,7 @@ class Bot(commands.Bot):
 
         activity = discord.Activity(
             type=discord.ActivityType.watching,
-            name="Viendo la Luna 🌙"
+            name="Watching the Moon 🌙"
         )
         await self.change_presence(activity=activity)
 
