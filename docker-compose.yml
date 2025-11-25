@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  mizuki-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mizuki-bot
+    restart: unless-stopped
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - DISCORD_PREFIX=${DISCORD_PREFIX}
+      - DISCORD_ACTIVITY=${DISCORD_ACTIVITY}
+    volumes:
+      - ./bot.log:/app/bot.log
+      - ./data:/app/data
+    env_file:
+      - .env
+    networks:
+      - mizuki-network
+
+networks:
+  mizuki-network:
+    driver: bridge
+

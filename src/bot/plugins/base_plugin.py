@@ -28,7 +28,7 @@ class BasePlugin(ABC):
         await self._cleanup_commands()
         self.logger.info(f"Plugin {self.PLUGIN_NAME} teardown")
 
-    async def cleanup_commands(self):
+    async def _cleanup_commands(self):
         for command in self._prefix_commands:
             self.bot.remove_command(command.name)
 

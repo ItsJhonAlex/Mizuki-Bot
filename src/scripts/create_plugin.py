@@ -5,7 +5,7 @@ import argparse
 PLUGIN_TEMPLATE = '''import discord
 from discord import app_commands
 from discord.ext import commands
-from bot.plugins.base_plugin import BasePlugin
+from src.bot.plugins.base_plugin import BasePlugin
 
 class {class_name}(BasePlugin):
     """{description}"""
@@ -16,19 +16,19 @@ class {class_name}(BasePlugin):
     PLUGIN_AUTHOR = "{author}"
 
     async def setup(self):
-        self.logger.info(" {name}...")
+        self.logger.info("Loading {name}...")
 
         @commands.command(name="example")
         async def example(ctx: commands.Context):
             await ctx.send("Hello from {name}!")
 
-        self.register_prefix_command(example_prefix)
+        self.register_prefix_command(example)
 
-    @app_commands.command(name="example", description="Example command")
+        @app_commands.command(name="example", description="Example command")
         async def example_slash(interaction: discord.Interaction):
             embed = discord.Embed(
                 title="Example",
-                description="Hello {name}!",
+                description="Hello from {name}!",
                 color=0x00ff00
             )
             await interaction.response.send_message(embed=embed)

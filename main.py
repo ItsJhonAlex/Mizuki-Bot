@@ -11,7 +11,8 @@ import sys
 from dotenv import load_dotenv
 load_dotenv()
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
+# Ensure the project root is in the Python path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from src.bot.core.bot import Bot
 from src.bot.utils.logger import setup_logger
@@ -30,5 +31,6 @@ async def main():
     except Exception as e:
         logger.exception(f"A critical error occurred: {e}")
         sys.exit(1)
+
 if __name__ == "__main__":
     asyncio.run(main())

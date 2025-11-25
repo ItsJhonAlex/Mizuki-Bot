@@ -49,13 +49,13 @@ class Bot(commands.Bot):
 
         try:
             synced = await self.tree.sync()
-            self.logger.info(f"Successfully synced {synced} guilds")
+            self.logger.info(f"Successfully synced {len(synced)} slash commands")
         except Exception as e:
-            self.logger.error(f"Failed to sync guilds: {e}")
+            self.logger.error(f"Failed to sync commands: {e}")
 
         activity = discord.Activity(
             type=discord.ActivityType.watching,
-            name="Watching the Moon 🌙"
+            name= os.getenv("DISCORD_ACTIVITY")
         )
         await self.change_presence(activity=activity)
 
