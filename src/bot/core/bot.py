@@ -4,6 +4,7 @@ import logging
 import os
 from typing import Optional
 from src.bot.core.plugin_manager import PluginManager
+from src.bot.utils.database import db
 
 class Bot(commands.Bot):
 
@@ -25,6 +26,15 @@ class Bot(commands.Bot):
 
     async def setup_hook(self):
         self.logger.info(f"Setup hook called")
+        
+        # Connect to database
+        db_connected = await db.connect()
+        if db_connected:
+            # Initialize tables
+            await db.init_tables()
+        else:
+            self.logger.warning("Bot starting without database connection")
+        
         await self.plugins.load_plugins()
         self.logger.info("Successfully loaded plugins")
 
@@ -62,4 +72,6 @@ class Bot(commands.Bot):
 
     async def close(self):
         self.logger.info("Closing bot")
+        # Close database connection
+        await db.close()
         await super().close()

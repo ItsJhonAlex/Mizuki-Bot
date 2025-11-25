@@ -37,7 +37,7 @@ Mizuki-Bot/
 ├── main.py                # Punto de entrada
 ├── pyproject.toml         # Configuración del proyecto
 ├── Dockerfile             # Contenedor Docker
-└── docker-compose.yml     # Orchestración Docker
+└── docker compose.yml     # Orchestración Docker
 ```
 
 ## 🚀 Instalación
@@ -86,23 +86,53 @@ python main.py
 
 ### Instalación con Docker
 
-1. **Construir la imagen**
+> 🐳 El Docker Compose incluye PostgreSQL + Bot automáticamente
+
+1. **Configurar variables de entorno**
+
+Crea un archivo `.env` desde el ejemplo:
+
 ```bash
-docker-compose build
+cp .env.example .env
+nano .env  # Edita y configura tus credenciales
 ```
 
-2. **Configurar variables de entorno**
+**⚠️ Importante**: Configura al menos:
+- `DISCORD_TOKEN` - Tu token de Discord
+- `DB_PASSWORD` - Contraseña segura para PostgreSQL
+- `DISCORD_ADMIN_ID` - Tu ID de Discord
 
-Crea un archivo `.env` con tus credenciales (ver paso 4 anterior)
-
-3. **Iniciar el bot**
+2. **Iniciar todo (Base de datos + Bot)**
 ```bash
-docker-compose up -d
+# Construir e iniciar en segundo plano
+docker compose up -d
+
+# Ver logs en tiempo real
+docker compose logs -f
+
+# Ver solo logs del bot
+docker compose logs -f mizuki-bot
+
+# Ver solo logs de la base de datos
+docker compose logs -f postgres
 ```
 
-4. **Ver logs**
+3. **Comandos útiles**
 ```bash
-docker-compose logs -f mizuki-bot
+# Detener todo
+docker compose stop
+
+# Reiniciar solo el bot
+docker compose restart mizuki-bot
+
+# Ver estado de los servicios
+docker compose ps
+
+# Detener y eliminar contenedores (los datos persisten)
+docker compose down
+
+# Reconstruir después de cambios en el código
+docker compose up -d --build
 ```
 
 ## 🔌 Sistema de Plugins
@@ -155,11 +185,24 @@ class MiPlugin(BasePlugin):
 
 ## 📝 Variables de Entorno
 
+### Discord
 | Variable | Descripción | Ejemplo | Requerido |
 |----------|-------------|---------|-----------|
 | `DISCORD_TOKEN` | Token del bot de Discord | `MTIzNDU2Nzg5MDEyMzQ1Njc4OQ...` | ✅ |
 | `DISCORD_PREFIX` | Prefijo para comandos de texto | `!` | ✅ |
 | `DISCORD_ACTIVITY` | Estado/actividad del bot | `the moon 🌙` | ❌ |
+| `DISCORD_ADMIN_ID` | ID del administrador del bot | `123456789012345678` | ✅ |
+
+### Base de Datos (PostgreSQL)
+| Variable | Descripción | Ejemplo | Requerido |
+|----------|-------------|---------|-----------|
+| `DB_HOST` | Host de la base de datos | `postgres` (Docker) / `localhost` (local) | ✅ |
+| `DB_PORT` | Puerto de PostgreSQL | `5432` | ✅ |
+| `DB_USER` | Usuario de PostgreSQL | `mizuki` | ✅ |
+| `DB_PASSWORD` | Contraseña de PostgreSQL | `tu_password_segura` | ✅ |
+| `DB_NAME` | Nombre de la base de datos | `mizuki_bot` | ✅ |
+
+> 💡 **Nota**: En Docker, `DB_HOST` se configura automáticamente a `postgres`. Para desarrollo local, usa `localhost`.
 
 ## 🛠️ Desarrollo
 

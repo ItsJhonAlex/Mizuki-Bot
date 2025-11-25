@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: mizuki-postgres
+    restart: unless-stopped
+    
+    environment:
+      # Variables de configuración de PostgreSQL
+      POSTGRES_USER: ${DB_USER:-mizuki}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+      POSTGRES_DB: ${DB_NAME:-mizuki_bot}
+      # Configuración de timezone
+      TZ: Europe/Madrid
+      PGTZ: Europe/Madrid
+    
+    ports:
+      # Puerto expuesto para conectarse desde fuera
+      - "${DB_PORT:-5432}:5432"
+    
+    volumes:
+      # Volumen para persistencia de datos
+      - postgres_data:/var/lib/postgresql/data
+      # Opcional: scripts de inicialización
+      # - ./init-scripts:/docker-entrypoint-initdb.d
+    
+    networks:
+      - mizuki-network
+    
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-mizuki}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  # Volumen nombrado para persistencia
+  postgres_data:
+    name: mizuki_postgres_data
+
+networks:
+  # Red para futura conexión con el bot
+  mizuki-network:
+    name: mizuki_network
+    driver: bridge
+

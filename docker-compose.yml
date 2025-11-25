@@ -1,25 +1,73 @@
 version: '3.8'
 
 services:
+  # Base de datos PostgreSQL
+  postgres:
+    image: postgres:16-alpine
+    container_name: mizuki-postgres
+    restart: unless-stopped
+    
+    environment:
+      POSTGRES_USER: ${DB_USER:-mizuki}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+      POSTGRES_DB: ${DB_NAME:-mizuki_bot}
+      TZ: Europe/Madrid
+      PGTZ: Europe/Madrid
+    
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    
+    networks:
+      - mizuki-network
+    
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-mizuki}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Bot de Discord
   mizuki-bot:
     build:
       context: .
       dockerfile: Dockerfile
     container_name: mizuki-bot
     restart: unless-stopped
+    
+    depends_on:
+      postgres:
+        condition: service_healthy
+    
     environment:
       - DISCORD_TOKEN=${DISCORD_TOKEN}
       - DISCORD_PREFIX=${DISCORD_PREFIX}
       - DISCORD_ACTIVITY=${DISCORD_ACTIVITY}
+      - DISCORD_ADMIN_ID=${DISCORD_ADMIN_ID}
+      # Variables de base de datos (el host es el nombre del servicio)
+      - DB_HOST=postgres
+      - DB_PORT=${DB_PORT:-5432}
+      - DB_USER=${DB_USER:-mizuki}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME:-mizuki_bot}
+    
     volumes:
-      - ./bot.log:/app/bot.log
+      - ./logs:/app/logs
       - ./data:/app/data
+    
     env_file:
       - .env
+    
     networks:
       - mizuki-network
 
+volumes:
+  postgres_data:
+    name: mizuki_postgres_data
+
 networks:
   mizuki-network:
+    name: mizuki_network
     driver: bridge
-
