@@ -139,7 +139,16 @@ docker compose up -d --build
 
 ### Plugins Incluidos
 
-#### Admin Plugin
+#### 🏓 Ping Plugin
+- **Comandos**: `/ping`, `!ping`
+- **Descripción**: Verifica la latencia del bot (WebSocket y API)
+- **Permisos**: Todos
+- **Características**:
+  - Muestra latencia WebSocket y API
+  - Colores según rendimiento (verde/naranja/rojo)
+  - Funciona con slash y prefix commands
+
+#### 🔧 Admin Plugin
 - **Comando**: `/plugins`
 - **Descripción**: Lista todos los plugins cargados
 - **Permisos**: Administrador
@@ -230,11 +239,16 @@ ruff check src/
 
 | Comando | Descripción | Permisos |
 |---------|-------------|----------|
+| `/ping` | Verifica la latencia del bot | Todos |
 | `/plugins` | Lista todos los plugins cargados | Administrador |
 
 ### Comandos Prefix
 
 Configurable mediante `DISCORD_PREFIX` (por defecto: `!`)
+
+| Comando | Descripción | Permisos |
+|---------|-------------|----------|
+| `!ping` | Verifica la latencia del bot | Todos |
 
 ## 🤝 Contribuir
 
